@@ -1,0 +1,16 @@
+{
+  "name": "trivago-study-case",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:install": "./script/00-install-dev.sh",
+    "dev:up": "./script/01-up-dev.sh",
+    "dev:down": "docker-compose -f docker/docker-compose.dev.yml down",
+    "dev:uninstall": "docker-compose -f docker/docker-compose.dev.yml down --rmi all"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "peerDependencies": {}
+}

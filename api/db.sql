@@ -1,0 +1,4 @@
+CREATE TABLE "reviews" (
+    [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    [text] TEXT
+);

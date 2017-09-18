@@ -1,0 +1,37 @@
+version: '3'
+services:
+  server:
+    container_name: trivago-server
+    build:
+      context: ../.
+      dockerfile: docker/server/Dockerfile.dev
+    image: myapp-server
+    ports:
+      - '80:80' # Connect localhost 80 port to container 80 port
+    links: # Link services to access http://app and  http://api inside the container
+      - api:api
+      - app:app
+  app:
+    container_name: trivago-app
+    build:
+      context: ../.
+      dockerfile: docker/app/Dockerfile.dev
+    image: myapp-app
+    environment:
+      - NODE_ENV=development
+    volumes: # For webpack dev server to use our local files
+      - ./../app:/usr/src/app
+    ports:
+      - '3000:3000' # For docker to now where to redirect HMR queries
+  api:
+    container_name: trivago-api
+    build:
+      context: ../.
+      dockerfile: docker/api/Dockerfile.dev
+    image: myapp-api
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./../api:/usr/src/api
+    ports:
+      - '8080:8080'
