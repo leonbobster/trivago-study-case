@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
-import { createReview } from './../../actions/reviews';
+import { gql, graphql } from 'react-apollo';
+import { createHashHistory } from 'history';
 
 class CreateReview extends Component {
     constructor() {
@@ -26,7 +25,12 @@ class CreateReview extends Component {
                         className="form-control"></textarea>
                 </div>
                 <button
-                    onClick={() => this.props.createReview(this.state.text)}
+                    onClick={() => {
+                        this.props.mutate({
+                            variables: { text: this.state.text }
+                        });
+                        createHashHistory().push('/review-list');
+                    }}
                     type="submit"
                     className="btn btn-primary">Save</button>
             </form>
@@ -34,10 +38,10 @@ class CreateReview extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        createReview: (text) => dispatch(createReview(text))
-    };
-};
+const mutation = gql`
+    mutation createReview($text: String!) {
+        createReview(text: $text) { id }
+    }
+`;
 
-export default connect(state => { return {}; }, mapDispatchToProps)(CreateReview);
+export default graphql(mutation)(CreateReview);

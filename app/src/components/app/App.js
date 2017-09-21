@@ -9,13 +9,13 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import { Switch, Route } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import Analyzer from './../../containers/analyzer/Analyzer';
-import ReviewList from './../../containers/review-list/ReviewList';
-import CreateReview from './../../containers/create-review/CreateReview';
+import Analyzer from './../analyzer/Analyzer';
+import ReviewList from './../review-list/ReviewList';
+import CreateReview from './../create-review/CreateReview';
 import TopicList from './../topic-list/TopicList';
 import PageNotFound from './../page-not-found/PageNotFound';
 
-const App = (props) => {
+const App = () => {
   return (
     <div>
       <Navbar>

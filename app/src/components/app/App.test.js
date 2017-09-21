@@ -3,30 +3,33 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { mount } from 'enzyme';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { ApolloProvider, ApolloClient } from 'react-apollo';
+
+import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
+import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils';
+import typeDefs from './../../../../api/src/schema';
 
 describe('<App />', () => {
   let app;
-  const middlewares = [thunk];
-  const mockStore = configureStore(middlewares);
-  const store = mockStore({
-    analyzerFetchDataError: false,
-    analyzerFetchDataLoading: false,
-    analyzerFetchDataSuccess: [],
-    reviewsFetchData: false,
-    reviewsFetchDataLoading: false,
-    reviewsFetchDataSuccess: []
+
+  // Create GraphQL schema object
+  const schema = makeExecutableSchema({ typeDefs });
+  // Add mocks
+  addMockFunctionsToSchema({ schema });
+  // Create network interface
+  const mockNetworkInterface = mockNetworkInterfaceWithSchema({ schema });
+  // Initialize client
+  const client = new ApolloClient({
+    networkInterface: mockNetworkInterface,
   });
 
   beforeEach(() => {
     app = mount(
-      <Provider store={store}>
+      <ApolloProvider client={client}>
         <Router>
           <App />
         </Router>
-      </Provider>
+      </ApolloProvider>
     );
   });
 

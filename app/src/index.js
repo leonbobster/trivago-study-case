@@ -4,17 +4,20 @@ import './index.css';
 import App from './components/app/App';
 import registerServiceWorker from './registerServiceWorker';
 import { HashRouter as Router } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import configureStore from './store/configureStore';
+import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo';
 
-const store = configureStore();
+const client = new ApolloClient({
+    networkInterface: createNetworkInterface({
+        uri: 'http://localhost/api/graphql',
+    }),
+});
 
 ReactDOM.render(
-    <Provider store={store}>
+    <ApolloProvider client={client}>
         <Router>
             <App />
         </Router>
-    </Provider>,
+    </ApolloProvider>,
     document.getElementById('root')
 );
 registerServiceWorker();
