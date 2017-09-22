@@ -13,7 +13,7 @@ Server:
   
 Client:
 - React
-- React-Apollo
+- React-Apollo (GraphQl client)
 - React-Bootstrap
   
 Testing:  
