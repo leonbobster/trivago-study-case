@@ -9,7 +9,7 @@ import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apol
 const client = new ApolloClient({
     networkInterface: createNetworkInterface({
         uri: 'http://localhost/api/graphql',
-    }),
+    })
 });
 
 ReactDOM.render(

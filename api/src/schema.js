@@ -25,6 +25,7 @@ type Query {
 
 type Mutation {
     createReview(text: String): Review
+    deleteReview(id: Int): Review
 }
 
 `;

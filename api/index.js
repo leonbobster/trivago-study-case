@@ -1,13 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import ReviewService from './src/service/review-service';
-import { analyze } from './src/analyzer/analyzer';
-import { negatives, positives, topics } from './src/service/data';
-import { buildSchema } from 'graphql';
+import Papa from 'papaparse';
 
 // graphql
+import { buildSchema } from 'graphql';
 import graphqlHTTP from 'express-graphql';
 import typeDefs from './src/schema';
+import buildResolvers from './src/resolvers';
 
 // sqlite3
 import sqlite3Module from 'sqlite3';
@@ -23,46 +22,58 @@ const db = new sqlite3.Database(
 );
 
 const app = express();
-const reviewService = new ReviewService(db);
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const resolvers = {
-    reviews: () => reviewService.getAll(),
-    scores: () => {
-        const analyzeReview = review => analyze(review, topics, positives, negatives);
-        return reviewService.getAll()
-            .then(rows => {
-                return rows.map(review => {
-                    const { score, foundPhrases } = analyzeReview(review.text);
-                    return {
-                        id: review.id,
-                        score,
-                        review: review.text,
-                        topics: Object.keys(foundPhrases).map(k => `${k} ${foundPhrases[k] < 0 ? '-1' : '+1'}`)
-                    };
-                });
-            });
-    },
-    topics,
-    createReview: ({ text }) => {
-        const stmt = db.prepare(`INSERT INTO reviews(text) VALUES (?)`, [text])
-            .run(err => {
-                if (err)
-                    throw err;
-                return { id: stmt.lastID, text };
-            });
-    }
-};
-
 app.use('/graphql', graphqlHTTP({
     schema: buildSchema(typeDefs),
-    rootValue: resolvers,
+    rootValue: buildResolvers(db),
     graphiql: true
 }));
+
+app.post('/upload-topics', (req, res) => {
+    const parsed = Papa.parse(req.body.data);
+    if (parsed.errors.length > 0) {
+        return res.status(500).send(parsed.errors);
+    }
+    parsed.data.forEach(row => {
+        db.prepare(`INSERT INTO topics(topic, alternateNames) VALUES (?, ?)`, [
+            row.shift(),
+            JSON.stringify(row)
+        ])
+            .run(err => {
+                if (err)
+                    console.log(err);
+            });
+    });
+    res.send();
+});
+
+app.post('/upload-reviews', (req, res) => {
+    const parsed = Papa.parse(req.body.data);
+    if (parsed.errors.length > 0) {
+        res.status(500).send(parsed.errors); return;
+    }
+
+    const query = 'INSERT INTO reviews(text) VALUES ';
+    const values = [];
+    const params = [];
+    parsed.data.forEach(row => {
+        values.push('(?)');
+        params.push(row[0]);
+    });
+
+    db.prepare(query + values.join(','), params)
+        .run(err => {
+            if (err) {
+                res.status(500).send(err); return;
+            }
+            res.send('File has been uploaded');
+        });
+});
 
 process.on('SIGTERM', () => {
     db.close(err => {

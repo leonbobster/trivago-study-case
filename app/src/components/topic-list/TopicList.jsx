@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { graphql, gql } from 'react-apollo';
+import { Route } from 'react-router-dom';
 
 export class TopicList extends Component {
     getHtml(data) {
@@ -11,6 +12,13 @@ export class TopicList extends Component {
         }
         return (
             <div>
+                <div className="table">
+                    <Route render={({ history }) => (
+                        <a style={{ cursor: 'pointer' }}
+                            onClick={() => history.push('/upload-topics')}>
+                            <span className="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload CSV File</a>
+                    )} />
+                </div>
                 <table className="table">
                     <thead>
                         <tr>

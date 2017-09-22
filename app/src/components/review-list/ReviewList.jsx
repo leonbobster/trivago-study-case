@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { graphql, gql } from 'react-apollo';
-import Button from './../button/button';
+import { Route } from 'react-router-dom';
+
+import DeleteReview from './../DeleteReview.jsx';
 
 export class ReviewList extends Component {
     getHtml(data) {
@@ -12,6 +14,13 @@ export class ReviewList extends Component {
         }
         return (
             <div>
+                <div className="table">
+                    <Route render={({ history }) => (
+                        <a style={{ cursor: 'pointer' }}
+                            onClick={() => history.push('/upload-reviews')}>
+                            <span className="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload CSV File</a>
+                    )} />
+                </div>
                 <table className="table">
                     <thead>
                         <tr>
@@ -24,11 +33,22 @@ export class ReviewList extends Component {
                             <tr key={review.id}>
                                 <td>{review.id}</td>
                                 <td>{review.text}</td>
+                                <td><DeleteReview id={review.id} /></td>
                             </tr>
                         ))}
+                        <tr>
+                            <td colSpan="2">
+                                <Route render={({ history }) => (
+                                    <a
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => history.push('/create-review')}>
+                                        <span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Review
+                                        </a>
+                                )} />
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                <Button label="Create Review" url="/create-review" />
             </div>
         );
     }

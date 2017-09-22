@@ -28,8 +28,13 @@ class CreateReview extends Component {
                     onClick={() => {
                         this.props.mutate({
                             variables: { text: this.state.text }
-                        });
-                        createHashHistory().push('/review-list');
+                        })
+                            .then(() => {
+                                createHashHistory().push('/review-list');
+                                window.location.reload();
+                            })
+                            .catch(err => alert(err));
+
                     }}
                     type="submit"
                     className="btn btn-primary">Save</button>

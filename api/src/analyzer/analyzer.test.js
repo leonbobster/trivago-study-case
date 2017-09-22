@@ -1,8 +1,8 @@
-const {
+import {
     search,
     buildCriterias,
     analyze
-} = require('./analyzer');
+} from './analyzer';
 
 describe('search', () => {
     it('should search in empty text', () => {

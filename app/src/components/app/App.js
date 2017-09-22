@@ -14,6 +14,8 @@ import ReviewList from './../review-list/ReviewList';
 import CreateReview from './../create-review/CreateReview';
 import TopicList from './../topic-list/TopicList';
 import PageNotFound from './../page-not-found/PageNotFound';
+import UploadTopics from './../upload-topics/UploadTopics';
+import UploadReviews from './../upload-reviews/UploadReviews';
 
 const App = () => {
   return (
@@ -45,6 +47,8 @@ const App = () => {
           <Route path="/review-list" component={ReviewList} />
           <Route path="/topic-list" component={TopicList} />
           <Route path="/create-review" component={CreateReview} />
+          <Route path="/upload-topics" component={UploadTopics} />
+          <Route path="/upload-reviews" component={UploadReviews} />
           <Route component={PageNotFound} />
         </Switch>
       </div>

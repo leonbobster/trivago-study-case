@@ -1,4 +1,4 @@
-const AhoCorasick = require('aho-corasick');
+import AhoCorasick from 'aho-corasick';
 
 /**
  * Search phrases in a string using Aho-Corasick algorithm implementation
@@ -8,7 +8,7 @@ const AhoCorasick = require('aho-corasick');
  * 
  * @returns {string[]} Found phrases
  */
-function search(text, phrases) {
+export function search(text, phrases) {
     if (!text || !phrases)
         return [];
 
@@ -39,7 +39,7 @@ function search(text, phrases) {
  * 
  * @returns {Object.<string, string>} Criterias
  */
-function buildCriterias(topic, alternateNames, adjectives) {
+export function buildCriterias(topic, alternateNames, adjectives) {
     const criterias = {};
     for (let i = 0; i < alternateNames.length; i++) {
         for (let j = 0; j < adjectives.length; j++) {
@@ -59,7 +59,7 @@ function buildCriterias(topic, alternateNames, adjectives) {
  * 
  * @return {{score: number, foundPhrases: Object.<string, number>}} Score 
  */
-function analyze(review, topics, positives, negatives) {
+export function analyze(review, topics, positives, negatives) {
     const positiveCriterias = {};
     const negativeCriterias = {};
     topics.forEach(topic => {
@@ -97,10 +97,4 @@ function analyze(review, topics, positives, negatives) {
             foundNegative.reduce(reducer(-1), {})
         )
     };
-};
-
-module.exports = {
-    search,
-    buildCriterias,
-    analyze
 };
