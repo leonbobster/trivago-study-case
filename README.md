@@ -2,7 +2,7 @@
 
 ## Description
 
-You don't need any button to analyze text, the app do it on the fly. You can add reviews with the form or with a csv file upload. The review analyzer is not a real-life application ;-). It concatenates adjactives, which are stored in the file as a JS array, with topics and then pass them to **Aho-Corasick** module. More information about algorithm: https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm .
+You don't need any button to analyze text, the app do it on the fly. You can add reviews with the form or with a csv file upload. The review analyzer is not a real-life application ;-). It concatenates adjactives, which are stored in a file as a JS array, with topics and then pass them to **Aho-Corasick** module. More information about algorithm: https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm .
 
 
 The challenge has been implemented using:
