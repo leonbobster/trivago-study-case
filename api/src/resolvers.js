@@ -25,30 +25,8 @@ const buildResolvers = (db) => {
             });
         },
         topics: () => topicService.getAll(),
-        createReview: ({ text }) => {
-            return new Promise((resolve, reject) => {
-                if (!text) {
-                    reject('Text is required'); return;
-                }
-                const stmt = db.prepare(`INSERT INTO reviews(text) VALUES (?)`, [text])
-                    .run(err => {
-                        if (err) {
-                            reject(err); return;
-                        }
-                        resolve({ id: stmt.lastID, text });
-                    });
-            });
-        },
-        deleteReview: ({ id }) => {
-            return new Promise((resolve, reject) => {
-                db.run('DELETE FROM reviews WHERE id = ?', [id], err => {
-                    if (err) {
-                        reject(err); return;
-                    }
-                    resolve({ id });
-                });
-            });
-        }
+        createReview: ({ text }) => reviewService.create({ text }),
+        deleteReview: ({ id }) => reviewService.delete(id)
     }
 };
 
