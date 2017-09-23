@@ -70,3 +70,17 @@ yarn dev:down
 ```
 yarn dev:uninstall
 ```
+
+## Testing
+
+Run tests client:
+```
+cd app
+yarn test
+```
+Run tests server:
+```
+cd api
+yarn test
+```
+
