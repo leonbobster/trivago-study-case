@@ -2,6 +2,9 @@
 
 ## Description
 
+You don't need any button to analyze text, app do it on the fly. You can add reviews with the form or with the csv file upload. The review analyzer is not a real-life application ;-). It concatenates adjactives, which are stored in the file as a JS array, with topics and then pass them to **Aho-Corasick** module. More information about algorithm: https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm .
+
+
 The challenge has been implemented using:
 
 Server:
@@ -18,10 +21,6 @@ Client:
   
 Testing:  
 - Jest
-
-For searching multiple substring in a text used **Aho-Corasick** JavaScript algorithm implementation.
-https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm
-
 
 ## Installation
 
@@ -59,3 +58,15 @@ trivago-app |   On Your Network:  http://172.18.0.2:3000/
 ```
 
 At this point everything is ready and you can navigate "http://localhost" in your browser.
+
+4. You can stop application with command:
+
+```
+yarn dev:down
+```
+
+## Uninstall
+
+```
+yarn dev:uninstall
+```
