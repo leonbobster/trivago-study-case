@@ -2,7 +2,7 @@
 
 ## Description
 
-The challenge has been implementing using:
+The challenge has been implemented using:
 
 Server:
 - Node.js
