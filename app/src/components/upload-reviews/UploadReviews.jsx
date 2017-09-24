@@ -17,7 +17,7 @@ class UploadReviews extends Component {
                 })
                     .then(resp => {
                         if (resp.status !== 200) {
-                            throw Error(resp.statusText);
+                            throw resp.json();
                         }
                         return resp;
                     })
@@ -25,7 +25,10 @@ class UploadReviews extends Component {
                         createHashHistory().push('/review-list');
                         window.location.reload();
                     })
-                    .catch(msg => alert(msg));
+                    .catch(resp => resp.then(err => {
+                        const msg = err.map(e => e.message).join('\n');
+                        alert('Malformed csv: ' + msg);
+                    }));
             };
             reader.readAsText(file);
         });

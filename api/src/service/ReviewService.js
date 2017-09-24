@@ -7,7 +7,7 @@ export default class ReviewService extends DataService {
 
     create({ text }) {
         if (!text) {
-            reject('Text is required'); return;
+            return new Promise((resolve, reject) => reject('Text is required.'));
         }
         return super.create({ text });
     }
