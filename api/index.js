@@ -37,7 +37,7 @@ app.use('/graphql', graphqlHTTP({
 app.post('/upload-topics', (req, res) => {
     const parsed = Papa.parse(req.body.data);
     if (parsed.errors.length > 0) {
-        return res.status(500).json(parsed.errors);
+        res.status(500).json(parsed.errors); return;
     }
     parsed.data.forEach(row => {
         db.prepare(`INSERT INTO topics(topic, alternateNames) VALUES (?, ?)`, [
@@ -55,7 +55,7 @@ app.post('/upload-topics', (req, res) => {
 app.post('/upload-reviews', (req, res) => {
     const parsed = Papa.parse(req.body.data);
     if (parsed.errors.length > 0) {
-        res.status(500).send(parsed.errors); return;
+        res.status(500).json(parsed.errors); return;
     }
 
     const query = 'INSERT INTO reviews(text) VALUES ';

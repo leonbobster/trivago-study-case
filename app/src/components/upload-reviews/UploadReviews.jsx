@@ -24,6 +24,7 @@ class UploadReviews extends Component {
                     .then(resp => {
                         createHashHistory().push('/review-list');
                         window.location.reload();
+                        alert('Reviews have been uploaded!');
                     })
                     .catch(resp => resp.then(err => {
                         const msg = err.map(e => e.message).join('\n');

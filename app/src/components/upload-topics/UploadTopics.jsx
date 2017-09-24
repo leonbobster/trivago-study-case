@@ -15,8 +15,16 @@ class UploadTopics extends Component {
                     },
                     body: `data=${encodeURIComponent(e.currentTarget.result)}`
                 })
-                    .then(res => console.log(res))
-                    .catch(err => console.log(err));
+                    .then(res => {
+                        if (res.status !== 200) {
+                            throw res.json();
+                        }
+                        alert('Topics have been uploaded!');
+                    })
+                    .catch(resp => resp.then(err => {
+                        const msg = err.map(e => e.message).join('\n');
+                        alert('Malformed csv: ' + msg);
+                    }));
 
                 createHashHistory().push('/topic-list');
             };
