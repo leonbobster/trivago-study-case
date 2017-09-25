@@ -4,6 +4,9 @@
 
 You don't need any button to analyze text, the app does it on the fly. You can add reviews with the form or with a csv file upload. The review analyzer is not a real-life application, it implements very simple algorithm. It concatenates adjactives that are stored in a file as a JS array with topics and then passes them to **Aho-Corasick** module. So there it is very straightforward way to create phrases to search. More information about algorithm: https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm .
 
+I used sqlite3 as it was required in task description in pdf, but it could be easily re-implemented with mysql or any other rdbms because all code realated to direct db queries is concentrated in one service class.
+https://github.com/leonbobster/trivago-study-case/blob/master/api/src/service/DataService.js
+
 
 The challenge has been implemented using:
 
