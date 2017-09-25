@@ -7,6 +7,8 @@ You don't need any button to analyze text, the app does it on the fly. You can a
 I used sqlite3 as it was required in task description in pdf, but it could be easily re-implemented with mysql or any other rdbms because all code realated to direct db queries is concentrated in one service class.
 https://github.com/leonbobster/trivago-study-case/blob/master/api/src/service/DataService.js
 
+Important: Validation and data filtering should be implemented before any inserts and updates in db, but it's skipped in this study case.
+
 
 The challenge has been implemented using:
 
