@@ -19,11 +19,20 @@ class UploadTopics extends Component {
                         if (res.status !== 200) {
                             throw res.json();
                         }
+                        return res;
+                    })
+                    .then(resp => {
+                        createHashHistory().push('/topic-list');
+                        window.location.reload();
                         alert('Topics have been uploaded!');
                     })
                     .catch(resp => resp.then(err => {
-                        const msg = err.map(e => e.message).join('\n');
-                        alert('Malformed csv: ' + msg);
+                        if (err.code) {
+                            console.log(err); // csv file contains duplicates
+                        } else {
+                            const msg = err.map(e => e.message).join('\n');
+                            alert('Malformed csv: ' + msg);
+                        }
                     }));
 
                 createHashHistory().push('/topic-list');

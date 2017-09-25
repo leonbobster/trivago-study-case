@@ -40,4 +40,33 @@ export default class DataService {
                 });
         });
     }
+
+    /**
+     * Create many resourses.
+     * 
+     * @param {Object[]} resourses 
+     */
+    createAll(resourses) {
+        if (resourses.length === 0) return;
+
+        const keys = Object.keys(resourses[0]).map(k => k.replace(/[^A-Za-z0-9\_]/g, ''));
+        const placeholders = keys.map(k => '?').join(',');
+        const values = resourses.map(r => `(${placeholders})`).join(',');
+        const params = resourses.reduce((x, y) => {
+            Object.keys(y).forEach(k => x.push(y[k]));
+            return x;
+        }, []);
+
+        const query = `INSERT INTO ${this.table}(${keys.join(',')}) VALUES ${values}`;
+
+        return new Promise((resolve, reject) => {
+            this.db.prepare(query, params)
+                .run(err => {
+                    if (err) {
+                        reject(err); return;
+                    }
+                    resolve();
+                });
+        });
+    }
 }

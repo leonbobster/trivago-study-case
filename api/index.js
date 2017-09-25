@@ -8,6 +8,9 @@ import graphqlHTTP from 'express-graphql';
 import typeDefs from './src/schema';
 import buildResolvers from './src/resolvers';
 
+import ReviewService from './src/service/ReviewService';
+import TopicService from './src/service/TopicService';
+
 // sqlite3
 import sqlite3Module from 'sqlite3';
 const sqlite3 = sqlite3Module.verbose();
@@ -20,6 +23,9 @@ const db = new sqlite3.Database(
         console.log('Connected to Trivago dababase.');
     }
 );
+
+const reviewService = new ReviewService(db);
+const topicService = new TopicService(db);
 
 const app = express();
 
@@ -37,42 +43,30 @@ app.use('/graphql', graphqlHTTP({
 app.post('/upload-topics', (req, res) => {
     const parsed = Papa.parse(req.body.data);
     if (parsed.errors.length > 0) {
-        res.status(500).json(parsed.errors); return;
+        return res.status(500).send(parsed.errors);
     }
-    parsed.data.forEach(row => {
-        db.prepare(`INSERT INTO topics(topic, alternateNames) VALUES (?, ?)`, [
-            row.shift(),
-            JSON.stringify(row)
-        ])
-            .run(err => {
-                if (err)
-                    console.log(err);
-            });
+    const data = parsed.data.map(row => {
+        return {
+            topic: row.shift(),
+            alternateNames: JSON.stringify(row)
+        };
     });
-    res.send();
+    topicService.createAll(data)
+        .then(() => res.send('Topics have been uploaded!'))
+        .catch(err => res.status(500).send(err));
 });
 
 app.post('/upload-reviews', (req, res) => {
     const parsed = Papa.parse(req.body.data);
     if (parsed.errors.length > 0) {
-        res.status(500).json(parsed.errors); return;
+        res.status(500).send(parsed.errors); return;
     }
-
-    const query = 'INSERT INTO reviews(text) VALUES ';
-    const values = [];
-    const params = [];
-    parsed.data.forEach(row => {
-        values.push('(?)');
-        params.push(row[0]);
+    const data = parsed.data.map(row => {
+        return { text: row[0] };
     });
-
-    db.prepare(query + values.join(','), params)
-        .run(err => {
-            if (err) {
-                res.status(500).send(err); return;
-            }
-            res.send('File has been uploaded');
-        });
+    reviewService.createAll(data)
+        .then(() => res.send('Reviews have been uploaded!'))
+        .catch(err => res.status(500).send(err));
 });
 
 process.on('SIGTERM', () => {
